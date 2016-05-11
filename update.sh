@@ -62,8 +62,9 @@ if [ ${BINVERASSOC[0]} -ne ${OSSVERASSOC[0]} ] ||
    [ ${BINVERASSOC[2]} -ne ${OSSVERASSOC[2]} ]; then
 	echo "bin/oss version mismatch"
 	exit 127
-else
-	echo "bin/oss versions match ($BINVER/$OSSVER)"
+elif [ "$MKVVER" = "$BINVER" ]; then
+	echo "Installed version is already the newest available"
+	cleanup_and_bail 0
 fi
 
 for ((i = 0; i <= 2; i++)); do

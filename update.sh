@@ -57,6 +57,8 @@ OSSVERASSOC=($OSSVER)
 unset IFS
 
 # pointless to continue if bin/oss versions don't match
+echo "bin version: $BINVER"
+echo "mkv version: $MKVVER"
 if [ ${BINVERASSOC[0]} -ne ${OSSVERASSOC[0]} ] || 
    [ ${BINVERASSOC[1]} -ne ${OSSVERASSOC[1]} ] || 
    [ ${BINVERASSOC[2]} -ne ${OSSVERASSOC[2]} ]; then
@@ -67,13 +69,26 @@ elif [ "$MKVVER" = "$BINVER" ]; then
 	cleanup_and_bail 0
 fi
 
+NEWCHECK="no"
 for ((i = 0; i <= 2; i++)); do
-	if [ "${BINVERASSOC[$i]}" -lt "${INSTALLED_VERSION[$i]}" ]; then
-		echo "Installed version is newer than bin/oss downloads" 1>&2
-		echo "(how does that even happen??)" 1>&2
-		exit 127
+	if [ "${BINVERASSOC[$i]}" -gt "${INSTALLED_VERSION[$i]}" ]; then
+		NEWCHECK="yes"
+		break
 	fi
+#	if [ "${BINVERASSOC[$i]}" -lt "${INSTALLED_VERSION[$i]}" ]; then
+#		echo "Installed version is newer than bin/oss downloads" 1>&2
+#		echo "${BINVERASSOC[$i]} is less than ${INSTALLED_VERSION[$i]} on index $i"
+#		echo "(how does that even happen??)" 1>&2
+#		exit 127
+#	fi
 done
+if [ "$NEWCHECK" == "yes" ]; then
+	echo "New version is newer"
+else
+	echo "Installed version is newer than bin/oss downloads" 1>&2
+	echo "(how does that even happen??)" 1>&2
+	exit 127
+fi
 
 # version check shouldn't require root. but some of this stuff does.
 # let's check root and re-run on via sudo if necessary

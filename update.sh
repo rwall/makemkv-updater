@@ -30,7 +30,7 @@ else
 	echo "Using MakeMKV version: $MKVVER" 1>&2
 fi
 
-URL='http://www.makemkv.com/forum2/viewtopic.php?f=3&t=224'
+URL='https://www.makemkv.com/forum/viewtopic.php?f=3&t=224'
 declare -A URLASSOC
 IFS=$'\n'
 FILES=($(curl -v $URL 2>/dev/null | grep -o -P -e 'http:\/\/www.makemkv.com\/download\/makemkv-(bin|oss)-\d+\.\d+\.\d+\.tar\.gz' 2>/dev/null | sort -u 2>/dev/null))
